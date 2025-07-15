@@ -1,0 +1,60 @@
+2025-07-11 20:02:32,067 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='FA3', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=8192, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='FA3_N8192', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:02:32,926 - __main__ - INFO - Trace is saved at: ./gpu_traces/FA3_N8192.json
+2025-07-11 20:02:33,162 - __main__ - INFO - Average latency: 0.0023 s
+2025-07-11 20:02:38,714 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='FA3', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=16384, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='FA3_N16384', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:02:41,856 - __main__ - INFO - Trace is saved at: ./gpu_traces/FA3_N16384.json
+2025-07-11 20:02:42,511 - __main__ - INFO - Average latency: 0.0065 s
+2025-07-11 20:02:46,255 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='FA3', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=32768, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='FA3_N32768', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:02:49,608 - __main__ - INFO - Trace is saved at: ./gpu_traces/FA3_N32768.json
+2025-07-11 20:02:52,193 - __main__ - INFO - Average latency: 0.0258 s
+2025-07-11 20:02:56,925 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='FA3', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=65536, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='FA3_N65536', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:03:09,614 - __main__ - INFO - Trace is saved at: ./gpu_traces/FA3_N65536.json
+2025-07-11 20:03:19,940 - __main__ - INFO - Average latency: 0.1031 s
+2025-07-11 20:03:25,001 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='FA3', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=131072, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='FA3_N131072', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:04:08,958 - __main__ - INFO - Trace is saved at: ./gpu_traces/FA3_N131072.json
+2025-07-11 20:04:50,021 - __main__ - INFO - Average latency: 0.4104 s
+2025-07-11 20:04:53,477 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=8192, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_N8192', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:04:55,647 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_N8192.json
+2025-07-11 20:04:55,778 - __main__ - INFO - Average latency: 0.0008 s
+2025-07-11 20:04:59,995 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=16384, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_N16384', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:05:01,947 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_N16384.json
+2025-07-11 20:05:02,182 - __main__ - INFO - Average latency: 0.0019 s
+2025-07-11 20:05:05,597 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=32768, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_N32768', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:05:08,142 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_N32768.json
+2025-07-11 20:05:08,941 - __main__ - INFO - Average latency: 0.0075 s
+2025-07-11 20:05:13,161 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=65536, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_N65536', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:05:17,416 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_N65536.json
+2025-07-11 20:05:19,793 - __main__ - INFO - Average latency: 0.0233 s
+2025-07-11 20:05:23,208 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=131072, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_N131072', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:05:34,338 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_N131072.json
+2025-07-11 20:05:43,955 - __main__ - INFO - Average latency: 0.0956 s
+2025-07-11 20:05:47,028 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA_opt1', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=8192, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_opt1_N8192', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:05:48,885 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_opt1_N8192.json
+2025-07-11 20:05:48,998 - __main__ - INFO - Average latency: 0.0007 s
+2025-07-11 20:05:52,699 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA_opt1', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=16384, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_opt1_N16384', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:05:55,074 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_opt1_N16384.json
+2025-07-11 20:05:55,323 - __main__ - INFO - Average latency: 0.0020 s
+2025-07-11 20:06:00,328 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA_opt1', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=32768, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_opt1_N32768', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:06:03,683 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_opt1_N32768.json
+2025-07-11 20:06:04,473 - __main__ - INFO - Average latency: 0.0074 s
+2025-07-11 20:06:08,605 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA_opt1', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=65536, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_opt1_N65536', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:06:12,798 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_opt1_N65536.json
+2025-07-11 20:06:15,153 - __main__ - INFO - Average latency: 0.0231 s
+2025-07-11 20:06:18,175 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA_opt1', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=131072, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_opt1_N131072', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:06:30,127 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_opt1_N131072.json
+2025-07-11 20:06:39,488 - __main__ - INFO - Average latency: 0.0931 s
+2025-07-11 20:06:42,462 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA_opt2', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=8192, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_opt2_N8192', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:06:44,017 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_opt2_N8192.json
+2025-07-11 20:06:44,095 - __main__ - INFO - Average latency: 0.0006 s
+2025-07-11 20:06:47,888 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA_opt2', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=16384, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_opt2_N16384', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:06:48,793 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_opt2_N16384.json
+2025-07-11 20:06:48,981 - __main__ - INFO - Average latency: 0.0017 s
+2025-07-11 20:06:52,157 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA_opt2', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=32768, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_opt2_N32768', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:06:53,647 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_opt2_N32768.json
+2025-07-11 20:06:54,231 - __main__ - INFO - Average latency: 0.0056 s
+2025-07-11 20:06:58,773 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA_opt2', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=65536, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_opt2_N65536', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:07:01,892 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_opt2_N65536.json
+2025-07-11 20:07:04,136 - __main__ - INFO - Average latency: 0.0222 s
+2025-07-11 20:07:07,470 - __main__ - INFO - Benchmark Arguments: Namespace(bench_atten_type='VSA_opt2', batch_size=1, num_heads=48, head_dim=64, topk=0.125, seq_len=131072, test_latency=True, trace_enable=True, torch_compile=False, trace_file_path_dir='./gpu_traces', trace_file_name='VSA_opt2_N131072', num_iters=100, log_file_name='benchmark_diff_seq.log')
+2025-07-11 20:07:17,196 - __main__ - INFO - Trace is saved at: ./gpu_traces/VSA_opt2_N131072.json
+2025-07-11 20:07:25,371 - __main__ - INFO - Average latency: 0.0814 s
