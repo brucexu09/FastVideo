@@ -64,7 +64,8 @@ setup(name=PACKAGE_NAME,
                             'cxx': cpp_flags,
                             'nvcc': cuda_flags
                         },
-                        libraries=['cuda'])
+                        libraries=['cuda'],
+                        library_dirs=['/usr/local/cuda-12.6/targets/x86_64-linux/lib/stubs'])
       ],
       cmdclass={'build_ext': BuildExtension},
       classifiers=[

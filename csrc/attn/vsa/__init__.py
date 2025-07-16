@@ -23,8 +23,8 @@ def video_sparse_attn(q, k, v, topk, block_size, compress_attn_weight=None):
     video_shape: tuple of (T, H, W)
     compress_attn_weight: [batch_size, num_heads, seq_len, head_dim]
     select_attn_weight: [batch_size, num_heads, seq_len, head_dim]
-    
-    V1 of sparse attention. Include compress attn and sparse attn branch, use average pooling to compress. 
+
+    V1 of sparse attention. Include compress attn and sparse attn branch, use average pooling to compress.
     Assume q, k, v is flattened in this way: [batch_size, num_heads, T//block_size[0], H//block_size[1], W//block_size[2], block_size[0], block_size[1], block_size[2]]
     """
 
@@ -35,12 +35,13 @@ def video_sparse_attn(q, k, v, topk, block_size, compress_attn_weight=None):
     assert block_elements % 64 == 0 and block_elements >= 64
     assert q.shape[2] % block_elements == 0
     batch_size, num_heads, seq_len, head_dim = q.shape
+    _, _, kv_len, head_dim = k.shape
     # compress attn
     q_compress = q.view(batch_size, num_heads, seq_len // block_elements,
                         block_elements, head_dim).mean(dim=3)
-    k_compress = k.view(batch_size, num_heads, seq_len // block_elements,
+    k_compress = k.view(batch_size, num_heads, kv_len // block_elements,
                         block_elements, head_dim).mean(dim=3)
-    v_compress = v.view(batch_size, num_heads, seq_len // block_elements,
+    v_compress = v.view(batch_size, num_heads, kv_len // block_elements,
                         block_elements, head_dim).mean(dim=3)
 
     output_compress, block_attn_score = torch_attention(q_compress, k_compress,
@@ -82,13 +83,13 @@ def generate_topk_block_sparse_pattern(block_attn_score: torch.Tensor,
     """
     Generate a block sparse pattern where each q block attends to exactly topk kv blocks,
     based on the provided attention scores.
-    
+
     Args:
         block_attn_score: [bs, h, num_q_blocks, num_kv_blocks]
             Attention scores between query and key blocks
         topk: int
             Number of kv blocks each q block attends to
-        
+
     Returns:
         q2k_block_sparse_index: [bs, h, num_q_blocks, topk]
             Contains the indices of kv blocks that each q block attends to.
@@ -127,7 +128,7 @@ def generate_topk_block_sparse_pattern(block_attn_score: torch.Tensor,
 def block_sparse_attn(q, k, v, q2k_block_sparse_index, q2k_block_sparse_num, k2q_block_sparse_index, k2q_block_sparse_num):
     """
     Differentiable block sparse attention function.
-    
+
     Args:
         q: Query tensor [batch_size, num_heads, seq_len_q, head_dim]
         k: Key tensor [batch_size, num_heads, seq_len_kv, head_dim]
@@ -136,7 +137,7 @@ def block_sparse_attn(q, k, v, q2k_block_sparse_index, q2k_block_sparse_num, k2q
         q2k_block_sparse_num: Number of sparse blocks for each query block
         k2q_block_sparse_index: Indices for key-to-query sparse blocks (for backward pass)
         k2q_block_sparse_num: Number of sparse blocks for each key block (for backward pass)
-    
+
     Returns:
         output: Attention output tensor [batch_size, num_heads, seq_len_q, head_dim]
     """
@@ -146,7 +147,7 @@ def block_sparse_attn(q, k, v, q2k_block_sparse_index, q2k_block_sparse_num, k2q
 
 def block_sparse_attention_fwd(q, k, v, q2k_block_sparse_index, q2k_block_sparse_num):
     """
-    block_sparse_mask: [bs, h, num_q_blocks, num_kv_blocks]. 
+    block_sparse_mask: [bs, h, num_q_blocks, num_kv_blocks].
         [*, *, i, j] = 1 means the i-th q block should attend to the j-th kv block.
     """
     # assert all elements in q2k_block_sparse_num can be devisible by 2
@@ -196,11 +197,11 @@ def index_to_mask_kernel(
 def index_to_mask(q2k_block_sparse_index, q2k_block_sparse_num, BLOCK_Q, BLOCK_K, num_k_blocks):
     """
     Convert block sparse indices to a mask.
-    
+
     Args:
         q2k_block_sparse_index: Indices for query-to-key sparse blocks
         q2k_block_sparse_num: Number of sparse blocks for each query block
-    
+
     Returns:
         mask: Block sparse mask tensor
     """
@@ -285,7 +286,7 @@ def topk_index_to_map(index: torch.Tensor,
                       transpose_map: bool = False):
     """
     Convert topk indices to a map.
-    
+
     Args:
         index: [bs, h, num_q_blocks, topk]
             The topk indices tensor.
@@ -293,7 +294,7 @@ def topk_index_to_map(index: torch.Tensor,
             The number of key-value blocks in the block_map returned
         transpose_map: bool
             If True, the block_map will be transposed on the final two dimensions.
-    
+
     Returns:
         block_map: [bs, h, num_q_blocks, num_kv_blocks]
             A binary map where 1 indicates that the q block attends to the kv block.
@@ -330,11 +331,11 @@ def topk_index_to_map(index: torch.Tensor,
 def map_to_index(block_map: torch.Tensor):
     """
     Convert a block map to indices and counts.
-    
+
     Args:
         block_map: [bs, h, num_q_blocks, num_kv_blocks]
             The block map tensor.
-    
+
     Returns:
         index: [bs, h, num_q_blocks, num_kv_blocks]
             The indices of the blocks.
@@ -426,13 +427,13 @@ class CheckpointSDPA(torch.autograd.Function):
 class BlockSparseAttnTorch:
     def __init__(self):
         self.ctx = None
-    
+
     def recompute_mask(self, _):
         recomputed_mask = index_to_mask(self.q2k_block_sparse_index, self.q2k_block_sparse_num, self.block_q, self.block_k, self.num_kv_blocks)
         mask_size = recomputed_mask.untyped_storage().size()
         self.mask.untyped_storage().resize_(mask_size)
-        self.mask.untyped_storage().copy_(recomputed_mask.untyped_storage()) 
-    
+        self.mask.untyped_storage().copy_(recomputed_mask.untyped_storage())
+
     def recompute(self, _):
         q, k, v, q2k_block_sparse_index, q2k_block_sparse_num = self.ctx.saved_tensors
         block_q = self.ctx.block_q
@@ -447,7 +448,7 @@ class BlockSparseAttnTorch:
     def forward(self, q, k, v, q2k_block_sparse_index, q2k_block_sparse_num, block_q, block_k):
         """
         Differentiable block sparse attention function using PyTorch.
-        
+
         Args:
             q: Query tensor [batch_size, num_heads, seq_len_q, head_dim]
             k: Key tensor [batch_size, num_heads, seq_len_kv, head_dim]
