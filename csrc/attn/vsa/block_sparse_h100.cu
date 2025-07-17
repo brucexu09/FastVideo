@@ -1573,7 +1573,7 @@ std::vector<torch::Tensor> block_sparse_attention_backward(
         reinterpret_cast<int32_t *>(k2q_block_sparse_index.data_ptr()),
         reinterpret_cast<int32_t *>(k2q_block_sparse_num.data_ptr())};
 
-    dim3 grid_bwd_2(seq_len / 64, qo_heads, batch);
+    dim3 grid_bwd_2(seq_len * CP / 64, qo_heads, batch);
     threads = 128;
 
     // cudadevicesynchronize();
