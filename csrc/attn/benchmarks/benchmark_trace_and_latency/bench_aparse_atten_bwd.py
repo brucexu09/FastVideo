@@ -10,7 +10,8 @@ from torch.profiler import profile, ProfilerActivity  # pyre-ignore
 # Import video sparse attention
 from vsa import video_sparse_attn
 from xformers.ops import fmha, memory_efficient_attention
-from flex_attn_vsa import VSA_attention_flex
+
+from csrc.attn.flex_attn_vsa import VSA_attention_flex
 
 # use flash attention v3
 fmha._set_use_fa3(True)
@@ -351,7 +352,7 @@ def parse_arguments():
     parser.add_argument(
         "--log_file_name",
         type=str,
-        default="benchmark_results.log",
+        default="/home/boxunxu/github_repo/FastVideo-fork/FastVideo/csrc/attn/benchmarks/benchmark_trace_and_latency/benchmark_results.log",
         help="Log file name",
     )
 
