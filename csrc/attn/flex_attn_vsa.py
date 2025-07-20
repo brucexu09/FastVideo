@@ -79,7 +79,7 @@ def VSA_attention_flex(
     op: Optional[AttentionOp] = None,
     use_fp8: bool = False,
     topk: int = 1,
-    block_size: list[int] = [4, 4, 4],  # (B_T, B_H, B_W)
+    block_size: tuple[int, int, int] = (4, 4, 4),  # (B_T, B_H, B_W)
     compress_attn_weight=0.0,
 ):
     """
