@@ -34,14 +34,14 @@ def video_sparse_attn(q, k, v, topk, block_size, compress_attn_weight=None, mode
     block_elements = block_size[0] * block_size[1] * block_size[2]
     assert block_elements % 64 == 0 and block_elements >= 64
     assert q.shape[2] % block_elements == 0
-    batch_size, num_heads, q_seq_len, head_dim = q.shape
-    _, _, kv_seq_len, head_dim = k.shape
+    batch_size, num_heads, seq_len, head_dim = q.shape
+    _, _, kv_len, head_dim = k.shape
     # compress attn
     q_compress = q.view(batch_size, num_heads, q_seq_len // block_elements,
                         block_elements, head_dim).mean(dim=3)
-    k_compress = k.view(batch_size, num_heads, kv_seq_len // block_elements,
+    k_compress = k.view(batch_size, num_heads, kv_len // block_elements,
                         block_elements, head_dim).mean(dim=3)
-    v_compress = v.view(batch_size, num_heads, kv_seq_len // block_elements,
+    v_compress = v.view(batch_size, num_heads, kv_len // block_elements,
                         block_elements, head_dim).mean(dim=3)
 
     output_compress, block_attn_score = torch_attention(q_compress, k_compress,
