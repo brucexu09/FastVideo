@@ -130,7 +130,7 @@ def VSA_attention_flex(
         .view(query.shape)
     ) # B H Nq d
 
-    print("output_coarse.shape", output_coarse.shape)
+    # print("output_coarse.shape", output_coarse.shape)
 
     # Topk Selection
     _, topk_indices = torch.topk(block_attn_score, topk, dim=-1)

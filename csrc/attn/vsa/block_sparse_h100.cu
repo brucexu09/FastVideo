@@ -9,7 +9,7 @@ using namespace kittens;
 namespace cg = cooperative_groups;
 constexpr int BLOCK_M = 64;
 constexpr int BLOCK_N = 64;
-constexpr int CP = 4;
+constexpr int CP = 2;
 template <int D> struct fwd_attend_ker_tile_dims {};
 template <> struct fwd_attend_ker_tile_dims<64> {
   constexpr static int tile_width = (64);
@@ -1332,7 +1332,7 @@ std::vector<torch::Tensor> block_sparse_attention_backward(
 
   // TORCH_CHECK(seq_len % (4*kittens::TILE_DIM*4) == 0, "sequence length must
   // be divisible by 256");
-  dim3 grid_bwd(seq_len / (4 * kittens::TILE_ROW_DIM<bf16> * 4), qo_heads,
+  dim3 grid_bwd(seq_len * CP / (4 * kittens::TILE_ROW_DIM<bf16> * 4), qo_heads,
                 batch);
 
   if (head_dim == 64) {
@@ -1441,7 +1441,7 @@ std::vector<torch::Tensor> block_sparse_attention_backward(
         reinterpret_cast<int32_t *>(k2q_block_sparse_index.data_ptr()),
         reinterpret_cast<int32_t *>(k2q_block_sparse_num.data_ptr())};
 
-    dim3 grid_bwd_2(seq_len / 64, qo_heads, batch);
+    dim3 grid_bwd_2(seq_len * CP / 64, qo_heads, batch);
     threads = 128;
 
     // cudadevicesynchronize();
@@ -1573,7 +1573,7 @@ std::vector<torch::Tensor> block_sparse_attention_backward(
         reinterpret_cast<int32_t *>(k2q_block_sparse_index.data_ptr()),
         reinterpret_cast<int32_t *>(k2q_block_sparse_num.data_ptr())};
 
-    dim3 grid_bwd_2(seq_len / 64, qo_heads, batch);
+    dim3 grid_bwd_2(seq_len * CP / 64, qo_heads, batch);
     threads = 128;
 
     // cudadevicesynchronize();

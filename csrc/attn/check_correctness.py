@@ -33,11 +33,12 @@ torch.manual_seed(42)
 
 # random inputs
 batch_size = 1
-seq_len = 4096
+# seq_len = 8192
+seq_len = 16384
 head_num = 12
 head_dim = 64
 block_size = 64
-CP = 4 # context parallelism
+CP = 2 # context parallelism
 q = torch.randn(batch_size, seq_len//CP, head_num, head_dim, requires_grad=True, dtype=torch.bfloat16, device="cuda")
 k = torch.randn(batch_size, seq_len, head_num, head_dim, requires_grad=True, dtype=torch.bfloat16, device="cuda")
 v = torch.randn(batch_size, seq_len, head_num, head_dim, requires_grad=True, dtype=torch.bfloat16, device="cuda")
