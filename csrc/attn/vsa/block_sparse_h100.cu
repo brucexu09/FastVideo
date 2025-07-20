@@ -9,6 +9,7 @@ using namespace kittens;
 namespace cg = cooperative_groups;
 constexpr int BLOCK_M = 64;
 constexpr int BLOCK_N = 64;
+constexpr int CP = 4;
 template <int D> struct fwd_attend_ker_tile_dims {};
 template <> struct fwd_attend_ker_tile_dims<64> {
   constexpr static int tile_width = (64);
@@ -982,10 +983,10 @@ std::vector<torch::Tensor> block_sparse_attention_forward(
       q.size(2) == seq_len,
       "Q sequence length dimension - idx 2 - must match for all inputs");
   TORCH_CHECK(
-      k.size(2) == seq_len,
-      "K sequence length dimension - idx 2 - must match for all inputs");
+      k.size(2) == seq_len*CP,
+      "K sequence length dimension - idx 2 - must match for all inputs sss");
   TORCH_CHECK(
-      v.size(2) == seq_len,
+      v.size(2) == seq_len*CP,
       "V sequence length dimension - idx 2 - must match for all inputs");
   TORCH_CHECK(q2k_block_sparse_index.size(2) == seq_len / BLOCK_M,
               "q2k_block_sparse_index idx 2 - must match seq_len / BLOCK_M");
@@ -1077,10 +1078,10 @@ std::vector<torch::Tensor> block_sparse_attention_forward(
                     static_cast<unsigned int>(seq_len), 64U};
     k_global kg_arg{d_k, static_cast<unsigned int>(batch),
                     static_cast<unsigned int>(kv_heads),
-                    static_cast<unsigned int>(seq_len), 64U};
+                    static_cast<unsigned int>(seq_len*CP), 64U};
     v_global vg_arg{d_v, static_cast<unsigned int>(batch),
                     static_cast<unsigned int>(kv_heads),
-                    static_cast<unsigned int>(seq_len), 64U};
+                    static_cast<unsigned int>(seq_len*CP), 64U};
     l_global lg_arg{d_l, static_cast<unsigned int>(batch),
                     static_cast<unsigned int>(qo_heads), 1U,
                     static_cast<unsigned int>(seq_len)};
@@ -1137,10 +1138,10 @@ std::vector<torch::Tensor> block_sparse_attention_forward(
                     static_cast<unsigned int>(seq_len), 128U};
     k_global kg_arg{d_k, static_cast<unsigned int>(batch),
                     static_cast<unsigned int>(kv_heads),
-                    static_cast<unsigned int>(seq_len), 128U};
+                    static_cast<unsigned int>(seq_len*CP), 128U};
     v_global vg_arg{d_v, static_cast<unsigned int>(batch),
                     static_cast<unsigned int>(kv_heads),
-                    static_cast<unsigned int>(seq_len), 128U};
+                    static_cast<unsigned int>(seq_len*CP), 128U};
     l_global lg_arg{d_l, static_cast<unsigned int>(batch),
                     static_cast<unsigned int>(qo_heads), 1U,
                     static_cast<unsigned int>(seq_len)};
@@ -1216,10 +1217,10 @@ std::vector<torch::Tensor> block_sparse_attention_backward(
       q.size(2) == seq_len,
       "Q  sequence length dimension - idx 2 - must match for all inputs");
   TORCH_CHECK(
-      k.size(2) == seq_len,
+      k.size(2) == seq_len*CP,
       "K  sequence length dimension - idx 2 - must match for all inputs");
   TORCH_CHECK(
-      v.size(2) == seq_len,
+      v.size(2) == seq_len*CP,
       "V  sequence length dimension - idx 2 - must match for all inputs");
   TORCH_CHECK(
       l_vec.size(2) == seq_len,
@@ -1230,9 +1231,9 @@ std::vector<torch::Tensor> block_sparse_attention_backward(
   TORCH_CHECK(
       og.size(2) == seq_len,
       "OG sequence length dimension - idx 2 - must match for all inputs");
-  TORCH_CHECK(k2q_block_sparse_index.size(2) == seq_len / BLOCK_N,
+  TORCH_CHECK(k2q_block_sparse_index.size(2) == seq_len*CP / BLOCK_N,
               "k2q_block_sparse_index idx 2 - must match seq_len / BLOCK_N");
-  TORCH_CHECK(k2q_block_sparse_num.size(2) == seq_len / BLOCK_N,
+  TORCH_CHECK(k2q_block_sparse_num.size(2) == seq_len*CP / BLOCK_N,
               "k2q_block_sparse_num idx 2 - must match seq_len / BLOCK_N");
 
   TORCH_CHECK(
@@ -1292,11 +1293,11 @@ std::vector<torch::Tensor> block_sparse_attention_backward(
       l_vec.options());
   torch::Tensor kg = torch::zeros(
       {static_cast<const uint>(batch), static_cast<const uint>(kv_heads),
-       static_cast<const uint>(seq_len), static_cast<const uint>(head_dim)},
+       static_cast<const uint>(seq_len*CP), static_cast<const uint>(head_dim)},
       l_vec.options());
   torch::Tensor vg = torch::zeros(
       {static_cast<const uint>(batch), static_cast<const uint>(kv_heads),
-       static_cast<const uint>(seq_len), static_cast<const uint>(head_dim)},
+       static_cast<const uint>(seq_len*CP), static_cast<const uint>(head_dim)},
       l_vec.options());
 
   torch::Tensor d_vec = torch::empty(
@@ -1401,10 +1402,10 @@ std::vector<torch::Tensor> block_sparse_attention_backward(
                            static_cast<unsigned int>(seq_len), 64U};
     bwd_k_global bwd_k_arg{d_k, static_cast<unsigned int>(batch),
                            static_cast<unsigned int>(kv_heads),
-                           static_cast<unsigned int>(seq_len), 64U};
+                           static_cast<unsigned int>(seq_len*CP), 64U};
     bwd_v_global bwd_v_arg{d_v, static_cast<unsigned int>(batch),
                            static_cast<unsigned int>(kv_heads),
-                           static_cast<unsigned int>(seq_len), 64U};
+                           static_cast<unsigned int>(seq_len*CP), 64U};
     bwd_og_global bwd_og_arg{d_og, static_cast<unsigned int>(batch),
                              static_cast<unsigned int>(qo_heads),
                              static_cast<unsigned int>(seq_len), 64U};
@@ -1413,10 +1414,10 @@ std::vector<torch::Tensor> block_sparse_attention_backward(
                              static_cast<unsigned int>(seq_len), 64U};
     bwd_kg_global bwd_kg_arg{d_kg, static_cast<unsigned int>(batch),
                              static_cast<unsigned int>(kv_heads),
-                             static_cast<unsigned int>(seq_len), 64U};
+                             static_cast<unsigned int>(seq_len*CP), 64U};
     bwd_vg_global bwd_vg_arg{d_vg, static_cast<unsigned int>(batch),
                              static_cast<unsigned int>(kv_heads),
-                             static_cast<unsigned int>(seq_len), 64U};
+                             static_cast<unsigned int>(seq_len*CP), 64U};
     bwd_l_global bwd_l_arg{d_l, static_cast<unsigned int>(batch),
                            static_cast<unsigned int>(qo_heads), 1U,
                            static_cast<unsigned int>(seq_len)};
@@ -1533,10 +1534,10 @@ std::vector<torch::Tensor> block_sparse_attention_backward(
                            static_cast<unsigned int>(seq_len), 128U};
     bwd_k_global bwd_k_arg{d_k, static_cast<unsigned int>(batch),
                            static_cast<unsigned int>(kv_heads),
-                           static_cast<unsigned int>(seq_len), 128U};
+                           static_cast<unsigned int>(seq_len*CP), 128U};
     bwd_v_global bwd_v_arg{d_v, static_cast<unsigned int>(batch),
                            static_cast<unsigned int>(kv_heads),
-                           static_cast<unsigned int>(seq_len), 128U};
+                           static_cast<unsigned int>(seq_len*CP), 128U};
     bwd_og_global bwd_og_arg{d_og, static_cast<unsigned int>(batch),
                              static_cast<unsigned int>(qo_heads),
                              static_cast<unsigned int>(seq_len), 128U};
@@ -1545,10 +1546,10 @@ std::vector<torch::Tensor> block_sparse_attention_backward(
                              static_cast<unsigned int>(seq_len), 128U};
     bwd_kg_global bwd_kg_arg{d_kg, static_cast<unsigned int>(batch),
                              static_cast<unsigned int>(kv_heads),
-                             static_cast<unsigned int>(seq_len), 128U};
+                             static_cast<unsigned int>(seq_len*CP), 128U};
     bwd_vg_global bwd_vg_arg{d_vg, static_cast<unsigned int>(batch),
                              static_cast<unsigned int>(kv_heads),
-                             static_cast<unsigned int>(seq_len), 128U};
+                             static_cast<unsigned int>(seq_len*CP), 128U};
     bwd_l_global bwd_l_arg{d_l, static_cast<unsigned int>(batch),
                            static_cast<unsigned int>(qo_heads), 1U,
                            static_cast<unsigned int>(seq_len)};
