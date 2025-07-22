@@ -368,6 +368,7 @@ def main():
         filename=args.log_file_name,
         filemode="a",
     )
+
     logger = logging.getLogger(__name__)
 
     logger.info(f"Benchmark Arguments: {args}")
